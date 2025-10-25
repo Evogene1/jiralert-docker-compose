@@ -1,0 +1,29 @@
+global:
+
+route:
+  group_by: ['...']
+  group_wait: 0s
+  group_interval: 1s
+  repeat_interval: 3h
+  #group_wait: 5s # Wait time to buffer alerts before sending
+  #group_interval: 60s # How long to wait before sending a notification about new alerts that are added to a group of alerts for which an initial notification has already been sent. Note: The alert will be considered as resolved after this time interval sothat new alert can be sent if appears again.
+  #repeat_interval: 120h # How long to wait before sending a notification again if it has already been sent successfully for an alert. Note: If alert is not resolved, then the same alert will be resent after this interval.
+  receiver: 'test'
+
+  routes:
+
+    - receiver: 'jira-ssl'
+      match:
+        alertname: "SSL certificate"
+
+receivers:
+
+  - name: 'jira-ssl'
+    webhook_configs:
+      - url: 'http://localhost:9097/alert'
+        send_resolved: true
+
+templates:
+  - /etc/alertmanager/*.tmpl
+
+
